@@ -55,7 +55,7 @@ class Popup extends React.Component {
                                     case 0:
                                         if (item.status !== false) {
                                             return <div key={index}>
-                                                <ul class="success-info">
+                                                <ul className="success-info">
                                                     <li><span>Номер попытки:</span> {index}</li>
                                                     <li> <span>Phone number:</span> {item.phone}</li>
                                                     <li><span>Дата:</span> {item.date}</li>
@@ -74,7 +74,7 @@ class Popup extends React.Component {
                                     case 1:
                                         if (item.status !== false) {
                                             return <div key={index}>
-                                                <ul class="error-info">
+                                                <ul className="error-info">
                                                     <li><span>Номер попытки:</span> {index}</li>
                                                     <li><span>Статус:</span> Ошибка, введен неверный смс код</li>
                                                     <li> <span>Phone number:</span> {item.phone}</li>

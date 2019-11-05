@@ -145,11 +145,6 @@ class SignIn extends React.Component {
         window.grecaptcha.reset();
         this.setState({ showIn: false, showPhone: true })
     }
-    signOut = () => {
-        this.setState({ showIn: false, showPhone: true })
-        this.props.firebase.auth.auth().signOut()
-        window.grecaptcha.reset(window.recaptchaWidgetId)
-    }
     componentDidMount() {
         window.recaptchaVerifier = new this.props.firebase.auth.auth.RecaptchaVerifier(this.recaptcha, {
             'size': 'invisible',

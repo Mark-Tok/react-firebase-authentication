@@ -22,28 +22,39 @@ class InputAutocomplete extends React.Component {
             geo: [],
             lat: null,
             lng: null,
-            time: props.fetchData.timezone
+            time: props.fetchData.timezone,
+            placeholder: ''
         }
     }
     handlePlaceinArray = (value) => {
-        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${value.formatted_address}&key=AIzaSyD7wnsf-UqPzXtMXLjXCQ29Nw053bj_KSk`)
-        .then(response => response.json())
-        .then(place =>  this.setState((state, props) => {
-            return {geo: [...state.geo, place]};
-          }))
-        .then(() => {
-            let {putActionGeoCoordinate} = this.props;
-            this.state.geo.map((item) => {
-                let url = `https://maps.googleapis.com/maps/api/timezone/json?location=${item.results[0].geometry.location.lat},${item.results[0].geometry.location.lng}&timestamp=1331161200&key=AIzaSyD7wnsf-UqPzXtMXLjXCQ29Nw053bj_KSk`
-                return putActionGeoCoordinate(url)
+        if(value.formatted_address === undefined) {
+            alert('Выберете город из выпадающего списка')
+        }
+        else {
+            fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${value.formatted_address}&key=AIzaSyD7wnsf-UqPzXtMXLjXCQ29Nw053bj_KSk`)
+            .then(response => response.json())
+            .then(place =>  this.setState((state, props) => {
+                return {geo: [...state.geo, place]};
+              }))
+            .then(() => {
+                let {putActionGeoCoordinate} = this.props;
+                this.state.geo.map((item) => {
+                    let url = `https://maps.googleapis.com/maps/api/timezone/json?location=${item.results[0].geometry.location.lat},${item.results[0].geometry.location.lng}&timestamp=1331161200&key=AIzaSyD7wnsf-UqPzXtMXLjXCQ29Nw053bj_KSk`
+                    return putActionGeoCoordinate(url)
+                })
             })
-        })
-        .then(() => {
-            let {requestApiData} = this.props;
-            requestApiData()
-        })
+            .then(() => {
+                let {requestApiData} = this.props;
+                requestApiData()
+            }).then(() => {
+                this.setState({placeholder: ''})
+            })
+        }
        
     }
+    handleChangeValue = (event) => {
+        this.setState({placeholder: event.target.value})
+    } 
     render() {
         return (
             <div className='autocomplete'>
@@ -52,6 +63,9 @@ class InputAutocomplete extends React.Component {
                     <Grid item xs={12}>
                         <Autocomplete
                             style={styleInput}
+                            placeholder='Введите название города'
+                            onChange={this.handleChangeValue}
+                            value={this.state.placeholder}
                             onPlaceSelected={(place, event) => {
                                 this.handlePlaceinArray(place, event);
                             }}
